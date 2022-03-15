@@ -6,7 +6,7 @@ import './App.css';
 import * as tf from "@tensorflow/tfjs";
 import * as facemesh from "@tensorflow-models/facemesh";
 import Webcam from 'react-webcam';
-
+import { drawMesh } from "./utilities";
 
 
 
@@ -21,7 +21,7 @@ function App() {
     const net = await facemesh.load({
       inputResolution: { width: 640, height: 480 }, scale: 0.8
     });
-    setInterval( () => {
+    setInterval(() => {
       detect(net)
     }, 100)
   };
@@ -49,7 +49,10 @@ function App() {
       // Make detections
       const face = await net.estimateFaces(video);
       console.log(face);
+
       // Get canvas context for drawing
+      const ctx = canvasRef.current.getContext("2d");
+      drawMesh(face, ctx)
     }
   };
 
